@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test File</title>
+</head>
+<body>
+    
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    let data = {
+        email: "tobechipaschal@gmail.com",
+        firstname: "Tobechukwu",
+        lastname: "Paschal",
+        password: "123456"
+    };
+    
+    $.ajax({
+        url: "api/register.php",
+        method: "POST",
+        data: data,
+        success: function (data) {
+            console.log(data)
+        },
+        error: function (e) {
+            console.log("ERROR : ", e);
+        }
+    });
+</script>
+
+
+
+
+</body>
+</html>
+
+    
