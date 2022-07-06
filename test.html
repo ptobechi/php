@@ -8,27 +8,35 @@
 </head>
 <body>
     
+    <input type="file" id="cover_img" >
+    <button onclick=clicked()>Click</button>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-    let data = {
-        email: "tobechipaschal@gmail.com",
-        firstname: "Tobechukwu",
-        lastname: "Paschal",
-        password: "123456"
-    };
-    
-    $.ajax({
-        url: "api/register.php",
-        method: "POST",
-        data: data,
-        success: function (data) {
-            console.log(data)
-        },
-        error: function (e) {
-            console.log("ERROR : ", e);
+<script type="text/javascript">
+    function clicked(){
+        let data = {
+            email: "tobechipaschal@gmail.com",
+            name: "Ghost Store",
+            username: "ghost01",
+            phone_number: "08063127213",
+            location: "Abuja",
+            // cover: document.getElementById("cover_img").files,
+            password: "123456"
         }
-    });
+        
+        $.ajax({
+            url: "api/restuarant/register.php",
+            method: "POST",
+            enctype: 'multipart/form-data',
+            data: data,
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+            }
+        });
+    }
 </script>
 
 

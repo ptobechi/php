@@ -6,8 +6,8 @@
   header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
 // //CREATE DB CONNECTION
-include_once('../config/db_conn.php');
-include_once('../model/accessModel.php');
+include_once('../../config/db_conn.php');
+include_once('../../model/user/user.php');
 
 $database = new Database();
 $db = $database->connect();
@@ -18,21 +18,37 @@ $user = new userAccess($db);
 // LOOK INTO THIS TO FIX LATER AND CHECK FOR ALTERNATIVE THAT ACCEPTS (MULTI-PART/FORM-data)
 // $data = json_decode(file_get_contents("php://input"));
 
-
+// GET PARSED DATA FROM REQUEST 
 foreach($_POST as $name => $value){
     $user->$name =  $value;
 }
 
-// SEND DATA TO MODEL FOR INSERTION
-if($user->register()){
+//RETURNED USER
+$logged_user = $user->login();
+
+//CHECK COUNT
+$num = $logged_user->rowCount();
+
+if($num > 0){
+    $user_arr = array();
+    $user_arr["data"] = array();
+    
+    while($row = $logged_user->fetch(PDO::FETCH_ASSOC)){
+        extract($row); //GIVE US DIRECT ACESS TO COLUMUN NAME email, userid WITHOUT $row --- ($row[email], $row['password'], $row['userid'])
+        $_SESSION["userid"] = $userid;
+    }
+
     echo json_encode(
-        array('status' => '201')
+        array('status' => '200')
     );
+
+
 }else{
     echo json_encode(
         array('status' => '400')
     );
 }
+
 
 
 
