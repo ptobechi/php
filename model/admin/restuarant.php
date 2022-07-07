@@ -64,7 +64,10 @@ class Restuarant{
             $num = $stmt->rowCount();
 
             if($num > 0){
-                echo("Email address already exists");
+                // echo("Email address already exists");
+                echo json_encode(
+                    array('status' => '400', 'message' => 'Email address already exists')
+                );
                 // return false;
                 exit;
     
@@ -164,11 +167,13 @@ class Restuarant{
         // EXECUTE THE QUERY
         if($stmt->execute()){
             return true;
+            exit;
         }
 
         // PRINT ERROR IF QUERY FAILED TO EXECUTE
         printf("Error %s. \n", $stmt->error);
-        return false;    
+        return false; 
+        exit;   
     }
 
     // USER LOGIN AUTHYENTICATION
@@ -178,6 +183,21 @@ class Restuarant{
             $md5_password = md5($this->password); 
 
             $query = 'SELECT * FROM '.$this->table.' WHERE email="'.$this->email.'" AND password="'.$md5_password.'"';
+            $stmt = $this->conn->prepare($query); 
+            $stmt->execute();
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
+
+    public function storeList(){
+        try {
+            $query = 'SELECT * FROM '.$this->table.' ORDER BY id DESC';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             return $stmt;

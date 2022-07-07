@@ -143,4 +143,19 @@ class userAccess{
             exit;
         }
     }
+    
+    public function usersList(){
+        try {
+            $query = 'SELECT * FROM '.$this->table.' ORDER BY id DESC';
+            $stmt = $this->conn->prepare($query); 
+            $stmt->execute();
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
 }

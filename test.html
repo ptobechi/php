@@ -14,21 +14,21 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
     function clicked(){
-        let data = {
-            email: "tobechipaschal@gmail.com",
-            name: "Ghost Store",
-            username: "ghost01",
-            phone_number: "08063127213",
-            location: "Abuja",
-            // cover: document.getElementById("cover_img").files,
-            password: "123456"
-        }
+        // let data = {
+        //     email: "tobechipaschal@gmail.com",
+        //     name: "Ghost Store",
+        //     username: "ghost01",
+        //     phone_number: "08063127213",
+        //     location: "Abuja",
+        //     // cover: document.getElementById("cover_img").files,
+        //     password: "123456"
+        // }
         
         $.ajax({
-            url: "api/restuarant/register.php",
-            method: "POST",
+            url: "api/admin/storeList.php",
+            method: "GET",
             enctype: 'multipart/form-data',
-            data: data,
+            // data: data,
             success: function (data) {
                 console.log(data)
             },
