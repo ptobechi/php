@@ -3,7 +3,7 @@
 class userAccess{
     // DB PARAM 
     private $conn;
-    private $table = "register";
+    private $table = "orders";
     private $userid;
     
     // USER PARAM 
@@ -132,22 +132,6 @@ class userAccess{
             $md5_password = md5($this->password); 
 
             $query = 'SELECT * FROM '.$this->table.' WHERE email="'.$this->email.'" AND password="'.$md5_password.'"';
-            $stmt = $this->conn->prepare($query); 
-            $stmt->execute();
-            return $stmt;
-
-        } catch (PDOException $e) {
-            // PRINT ERROR IF QUERY FAILED TO EXECUTE
-            printf("Error %s. \n", $e->getMessage());
-            // return false;  
-            exit;
-        }
-    }
-
-    // LIST OF ALL REGISTERED USERS 
-    public function usersList(){
-        try {
-            $query = 'SELECT * FROM '.$this->table.' ORDER BY id DESC';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             return $stmt;
