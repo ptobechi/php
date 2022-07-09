@@ -61,7 +61,7 @@ class Database{
         // EXECUTE THE QUERY
         $stmt->execute();
 
-        $query = ("CREATE TABLE IF NOT EXISTS menu ( 
+        $query = ("CREATE TABLE IF NOT EXISTS products ( 
             `id` INT NOT NULL AUTO_INCREMENT ,
             `restuarant_id` INT(11) NOT NULL , 
             `name` VARCHAR(255) NOT NULL , 
@@ -72,23 +72,6 @@ class Database{
             `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
             PRIMARY KEY  (`id`),
             FOREIGN KEY (`restuarant_id`) REFERENCES restuarant(`restuarant_id`)
-        )ENGINE = InnoDB;");
-        // PREPARE STATEMENT FOR INSERTING
-        $stmt = $this->conn->prepare($query);
-        // EXECUTE THE QUERY
-        $stmt->execute();
-
-        $query = ("CREATE TABLE IF NOT EXISTS drinks ( 
-            `id` INT NOT NULL AUTO_INCREMENT ,
-            `restuarant_id` INT(11) NOT NULL , 
-            `name` VARCHAR(255) NOT NULL , 
-            `price` VARCHAR(20) NOT NULL , 
-            `others` VARCHAR(255) NOT NULL , 
-            `status` INT(11) NOT NULL ,  
-            `image` VARCHAR(255) NOT NULL ,  
-            `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
-            PRIMARY KEY  (`id`),
-            FOREIGN KEY (`restuarant_id`) REFERENCES restuarant(`restuarant_id`) 
         )ENGINE = InnoDB;");
         // PREPARE STATEMENT FOR INSERTING
         $stmt = $this->conn->prepare($query);
