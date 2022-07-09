@@ -14,6 +14,31 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
     function clicked(){
+        let orders = [
+                {
+                    product: "Rice",
+                    price: "1200",
+                    qty: "2",
+                },
+                {
+                    product: "Beans",
+                    price: "200",
+                    qty: "2",
+                },
+                {
+                    product: "Stew",
+                    price: "100",
+                    qty: "1",
+                },
+            ];
+    // let cartItems = {};
+    // cartItems = JSON.parse(orders);
+
+    
+        // for (let i = 0; i < product.length; i++) {
+        //     orders.push({"product": product[i].value, "price": price[i].value, "qty": quantity[i].value, "img": image[i].value });
+        // }
+
         let data = {
             // email: "tobechipaschal@gmail.com",
             // name: "Ghost Store",
@@ -22,12 +47,12 @@
             // location: "Abuja",
             // // cover: document.getElementById("cover_img").files,
             // password: "123456"
-            userid: 123456,
-            orserd: ""
+            // userid: 9557529,
+            orders: JSON.stringify(orders)
         }
         
         $.ajax({
-            url: "api/restuarant/register.php",
+            url: "api/orders/takeOrder.php",
             method: "POST",
             enctype: 'multipart/form-data',
             data: data,

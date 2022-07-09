@@ -2,7 +2,7 @@
 // INITIALIZE HEADERS
   header('Access-Control-Allow-Origin: *');
   header('Content-Type: application/json');
-  header('Access-Control-Allow-Methods: POST');
+  header('Access-Control-Allow-Methods: GET');
   header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
 // //CREATE DB CONNECTION
@@ -14,27 +14,30 @@ $db = $database->connect();
 
 $user = new Order($db);
 
-// GET RAW DATA FROM API REQUEST 
-// LOOK INTO THIS TO FIX LATER AND CHECK FOR ALTERNATIVE THAT ACCEPTS (MULTI-PART/FORM-data)
-// $data = json_decode(file_get_contents("php://input"));
+//RETURNED USER
+$logged_user = $user->orderList();
 
-// GET PARSED DATA FROM REQUEST 
-// echo $_POST["orders"];
-// die;
-foreach($_POST as $name => $value){
-    $user->$name =  $value;
-}
+//CHECK COUNT
+$num = $logged_user->rowCount();
 
-// SEND DATA TO MODEL FOR INSERTION
-if($user->register()){
-    echo json_encode(
-        array('status' => '201')
-    );
+if($num > 0){
+    $data_arr = array();
+    $data_arr["status"] = "200";
+    $data_arr["data"] = array();
+    
+    while($row = $logged_user->fetch(PDO::FETCH_ASSOC)){
+        array_push($data_arr["data"], $row);
+    }
+
+    echo json_encode($data_arr);
+
+
 }else{
     echo json_encode(
         array('status' => '400')
     );
 }
+
 
 
 

@@ -99,7 +99,7 @@ class Database{
             `id` INT NOT NULL AUTO_INCREMENT ,
             `orderid` INT(11) NOT NULL , 
             `userid` INT(11) NOT NULL , 
-            `order` VARCHAR(255) NOT NULL , 
+            `requeste` VARCHAR(1025) NOT NULL , 
             `others` VARCHAR(255) NOT NULL , 
             `status` INT(11) NOT NULL ,  
             `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  

@@ -1,18 +1,18 @@
 <?php
 
-class userAccess{
+class Order{
     // DB PARAM 
     private $conn;
     private $table = "orders";
-    private $userid;
+    // private $userid;
     
     // USER PARAM 
-    public $firstname;
-    public $lastname;
-    public $email;
-    public $username;
-    public $phone_number;
-    public $password;
+    // public $firstname;
+    // public $lastname;
+    public $orders;
+    // public $userid;
+    // public $phone_number;
+    // public $password;
 
     // ESTABLISH A DATABASE CONNECTION
     public function __construct($db){
@@ -27,7 +27,7 @@ class userAccess{
         $id = $explode[1];  
 
         try {
-            $query = 'SELECT * FROM '.$this->table.' WHERE userid='.$id.'';
+            $query = 'SELECT * FROM '.$this->table.' WHERE orderid='.$id.'';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             //CHECK COUNT
@@ -38,7 +38,7 @@ class userAccess{
                 $explode = explode('.', $gen);
                 $id = $explode[1]; 
 
-                $query = 'SELECT * FROM '.$this->table.' WHERE userid='.$id.'';
+                $query = 'SELECT * FROM '.$this->table.' WHERE orderid='.$id.'';
                 $stmt = $this->conn->prepare($query); 
                 $stmt->execute();
                 $num = $stmt->rowCount();
@@ -87,33 +87,29 @@ class userAccess{
         $query = 'INSERT INTO '.$this->table.'
                     SET
                         userid=:userid,
-                        firstname=:firstname,
-                        lastname=:lastname,
-                        email=:email,
-                        password=:password';
+                        orderid=:orderid,
+                        requeste=:requeste,
+                        others="Nothing"';
 
         // PREPARE STATEMENT FOR INSERTING
         $stmt = $this->conn->prepare($query);
 
         // CLEAN USER DATA
-        $this->firtsname = htmlspecialchars(strip_tags($this->firstname));
-        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
-        $this->email = htmlspecialchars(strip_tags($this->email));
-        $this->password = htmlspecialchars(strip_tags($this->password));
-        $this->userid = $this->generateId();
+        $this->userid = 9557529;
+        // $this->orders = htmlspecialchars(strip_tags($this->orders));
+        $this->orderid = $this->generateId();
+        // $orders = "okau";
         
         // ENCRYPT PASSWORD 
-        $md5_password = md5($this->password);
+        // $md5_password = md5($this->password);
 
         // BIND PARAM 
-        $stmt->bindParam(':firstname', $this->firstname);
-        $stmt->bindParam(':lastname', $this->lastname);
-        $stmt->bindParam(':email', $this->email);
-        $stmt->bindParam(':password', $md5_password);
+        $stmt->bindParam(':orderid', $this->orderid);
+        $stmt->bindParam(':requeste', $this->orders);
         $stmt->bindParam(':userid', $this->userid);
 
         // CHECK IF EMAIL ALREADY EXISTS
-        $this->checkEmail();
+        // $this->checkEmail();
 
         // EXECUTE THE QUERY
         if($stmt->execute()){
@@ -132,6 +128,29 @@ class userAccess{
             $md5_password = md5($this->password); 
 
             $query = 'SELECT * FROM '.$this->table.' WHERE email="'.$this->email.'" AND password="'.$md5_password.'"';
+            $stmt = $this->conn->prepare($query); 
+            $stmt->execute();
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
+
+    // ORDER LIST 
+    public function orderList(){
+        try {
+            $query = 'SELECT * 
+                    FROM 
+                        '.$this->table.' o 
+            LEFT JOIN 
+                register r ON o.userid = r.userid 
+            ORDER BY 
+                o.created_at DESC';
+
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             return $stmt;

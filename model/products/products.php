@@ -3,7 +3,7 @@
 class userAccess{
     // DB PARAM 
     private $conn;
-    private $table = "register";
+    private $table = "products";
     private $userid;
     
     // USER PARAM 
