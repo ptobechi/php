@@ -14,23 +14,23 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
     function clicked(){
-        let orders = [
-                {
-                    product: "Rice",
-                    price: "1200",
-                    qty: "2",
-                },
-                {
-                    product: "Beans",
-                    price: "200",
-                    qty: "2",
-                },
-                {
-                    product: "Stew",
-                    price: "100",
-                    qty: "1",
-                },
-            ];
+        // let orders = [
+        //         {
+        //             product: "Rice",
+        //             price: "1200",
+        //             qty: "2",
+        //         },
+        //         {
+        //             product: "Beans",
+        //             price: "200",
+        //             qty: "2",
+        //         },
+        //         {
+        //             product: "Stew",
+        //             price: "100",
+        //             qty: "1",
+        //         },
+        //     ];
     // let cartItems = {};
     // cartItems = JSON.parse(orders);
 
@@ -44,15 +44,15 @@
             // name: "Ghost Store",
             // username: "ghost01",
             // phone_number: "08063127213",
-            // location: "Abuja",
+            category: "Meal",
             // // cover: document.getElementById("cover_img").files,
-            // password: "123456"
-            // userid: 9557529,
-            orders: JSON.stringify(orders)
+            name: "Rice and Plantain",
+            price: 1200,
+            // orders: JSON.stringify(orders)
         }
         
         $.ajax({
-            url: "api/orders/takeOrder.php",
+            url: "api/products/upload.php",
             method: "POST",
             enctype: 'multipart/form-data',
             data: data,

@@ -63,7 +63,9 @@ class Database{
 
         $query = ("CREATE TABLE IF NOT EXISTS products ( 
             `id` INT NOT NULL AUTO_INCREMENT ,
+            `product_id` INT(11) NOT NULL , 
             `restuarant_id` INT(11) NOT NULL , 
+            `category` VARCHAR(255) NOT NULL , 
             `name` VARCHAR(255) NOT NULL , 
             `price` VARCHAR(20) NOT NULL , 
             `others` VARCHAR(255) NOT NULL , 
