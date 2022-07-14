@@ -7,6 +7,7 @@ class Restuarant{
     private $restuarant_id;
     
     // USER PARAM 
+    public $id;
     public $name;
     public $email;
     public $username;
@@ -200,6 +201,33 @@ class Restuarant{
             $query = 'SELECT * FROM '.$this->table.' ORDER BY id DESC';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
+
+    public function storeinfo(){
+        try {
+            $query = 'SELECT 
+                * 
+            FROM 
+                '.$this->table.' 
+            WHERE 
+                id = ?
+            LIMIT 0,1';
+
+            $stmt = $this->conn->prepare($query); 
+
+            //BIND PARAM
+            $stmt->bindParam(1, $this->id);
+            
+            $stmt->execute();
+            
             return $stmt;
 
         } catch (PDOException $e) {
