@@ -8,13 +8,22 @@
 </head>
 <body>
     
-    <input type="file" id="cover_img" >
-    <button onclick=clicked()>Click</button>
+    <!-- <input type="file" id="cover_img" >
+    <button onclick=clicked()>Click</button> -->
+
+    <form id="loginForm">
+        <input type="email" id="useremail">
+        <input type="password" id="userpassword">
+        <button type="submit"  >Login</button>
+    </form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
-    function clicked(){
-        // let orders = [
+    document.getElementById("loginForm").addEventListener("submit", function(e){
+        e.preventDefault();
+        // alert("okay")
+
+         // let orders = [
         //         {
         //             product: "Rice",
         //             price: "1200",
@@ -44,26 +53,34 @@
             // name: "Ghost Store",
             // username: "ghost01",
             // phone_number: "08063127213",
-            category: "Meal",
+            vemail: document.getElementById("useremail").value,
             // // cover: document.getElementById("cover_img").files,
-            name: "Rice and Plantain",
-            price: 1200,
+            password: document.getElementById("userpassword").value
+            // price: 1200,.
             // orders: JSON.stringify(orders)
         }
         
         $.ajax({
-            url: "api/products/upload.php",
+            url: "api/vendors/login.php",
             method: "POST",
             enctype: 'multipart/form-data',
             data: data,
             success: function (data) {
                 console.log(data)
+                // alert(datas)
+                if(data.status == "200"){
+                    alert("redirect")
+                }else{
+                    alert("failed")
+                }
             },
             error: function (e) {
                 console.log("ERROR : ", e);
             }
         });
-    }
+    
+    })
+       
 </script>
 
 

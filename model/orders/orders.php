@@ -27,7 +27,7 @@ class Order{
         $id = $explode[1];  
 
         try {
-            $query = 'SELECT * FROM '.$this->table.' WHERE orderid='.$id.'';
+            $query = 'SELECT * FROM '.$this->table.' WHERE oid='.$id.'';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             //CHECK COUNT
@@ -38,7 +38,7 @@ class Order{
                 $explode = explode('.', $gen);
                 $id = $explode[1]; 
 
-                $query = 'SELECT * FROM '.$this->table.' WHERE orderid='.$id.'';
+                $query = 'SELECT * FROM '.$this->table.' WHERE oid='.$id.'';
                 $stmt = $this->conn->prepare($query); 
                 $stmt->execute();
                 $num = $stmt->rowCount();
@@ -54,42 +54,16 @@ class Order{
        return $id;
     }
 
-    public function checkEmail(){
-        try {
-            $query = 'SELECT * FROM '.$this->table.' WHERE email="'.$this->email.'"';
-            $stmt = $this->conn->prepare($query); 
-            $stmt->execute();
-            //CHECK COUNT
-            $num = $stmt->rowCount();
-
-            if($num > 0){
-                echo("Email address already exists");
-                // return false;
-                exit;
-    
-            }else{
-                return true;
-            }
-
-        } catch (PDOException $e) {
-            // PRINT ERROR IF QUERY FAILED TO EXECUTE
-            printf("Error %s. \n", $e->getMessage());
-            // return false;  
-            exit;
-
-        }
-
-    }
-
     // USERS REGISTRATION
     public function register(){
         // CREATE QUERY
         $query = 'INSERT INTO '.$this->table.'
                     SET
-                        userid=:userid,
-                        orderid=:orderid,
-                        requeste=:requeste,
-                        others="Nothing"';
+                        oid=:orderid,
+                        vid=:vendorid,
+                        uid=:userid,
+                        ocontent=:requeste,
+                        desc="Nothing"';
 
         // PREPARE STATEMENT FOR INSERTING
         $stmt = $this->conn->prepare($query);
@@ -105,6 +79,7 @@ class Order{
 
         // BIND PARAM 
         $stmt->bindParam(':orderid', $this->orderid);
+        $stmt->bindParam(':vendorid', $this->vendorid);
         $stmt->bindParam(':requeste', $this->orders);
         $stmt->bindParam(':userid', $this->userid);
 
@@ -172,6 +147,61 @@ class Order{
                 '.$this->table.' 
             WHERE 
                 id = ?
+            LIMIT 0,1';
+
+            $stmt = $this->conn->prepare($query); 
+
+            //BIND PARAM
+            $stmt->bindParam(1, $this->id);
+            
+            $stmt->execute();
+            
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
+
+    public function vendorOrderList(){
+        $id = $_SESSION["vid"];
+        
+        try {
+            $query = 'SELECT * 
+            FROM 
+                '.$this->table.' o 
+            LEFT JOIN 
+                register r ON o.uid = r.uid 
+            WHERE 
+                o.vid='.$id.'
+            ORDER BY 
+                o.created_at DESC';
+
+            $stmt = $this->conn->prepare($query); 
+            $stmt->execute();
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
+
+    public function vendorOrderInfo(){
+        $id = $_SESSION["vid"];
+        try {
+            $query = 'SELECT * 
+            FROM 
+            '.$this->table.' o 
+            LEFT JOIN 
+                register r ON o.uid = r.uid  
+            WHERE 
+                o.oid = ? AND o.vid='.$id.'
             LIMIT 0,1';
 
             $stmt = $this->conn->prepare($query); 

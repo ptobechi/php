@@ -1,6 +1,6 @@
 <?php
 
-class Restuarant{
+class Vendor{
     // DB PARAM 
     private $conn;
     private $table = "vendors";
@@ -29,7 +29,7 @@ class Restuarant{
         $id = $explode[1];  
 
         try {
-            $query = 'SELECT * FROM '.$this->table.' WHERE vid='.$id.'';
+            $query = 'SELECT * FROM '.$this->table.' WHERE restuarant_id='.$id.'';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             //CHECK COUNT
@@ -40,7 +40,7 @@ class Restuarant{
                 $explode = explode('.', $gen);
                 $id = $explode[1]; 
 
-                $query = 'SELECT * FROM '.$this->table.' WHERE vid='.$id.'';
+                $query = 'SELECT * FROM '.$this->table.' WHERE restuarant_id='.$id.'';
                 $stmt = $this->conn->prepare($query); 
                 $stmt->execute();
                 $num = $stmt->rowCount();
@@ -58,7 +58,7 @@ class Restuarant{
 
     public function checkEmail(){
         try {
-            $query = 'SELECT * FROM '.$this->table.' WHERE vemail="'.$this->vemail.'"';
+            $query = 'SELECT * FROM '.$this->table.' WHERE email="'.$this->email.'"';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             //CHECK COUNT
@@ -130,36 +130,36 @@ class Restuarant{
         // CREATE QUERY
         $query = 'INSERT INTO '.$this->table.'
                     SET
-                        vid=:vid,
-                        vname=:name,
-                        vemail=:email,
-                        vphone=:phone,
-                        vlocation=:location,
-                        vuname=:username,
+                        restuarant_id=:restuarant_id,
+                        name=:name,
+                        email=:email,
+                        phone=:phone,
+                        location=:location,
+                        username=:username,
                         password=:password ';
 
         // PREPARE STATEMENT FOR INSERTING
         $stmt = $this->conn->prepare($query);
         
         // CLEAN USER DATA
-        $this->vname = htmlspecialchars(strip_tags($this->vname));
-        $this->vemail = htmlspecialchars(strip_tags($this->vemail));
-        $this->vuname = htmlspecialchars(strip_tags($this->vuname));
-        $this->vphone = htmlspecialchars(strip_tags($this->vphone));
-        $this->vlocation = htmlspecialchars(strip_tags($this->vlocation));
+        $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->username = htmlspecialchars(strip_tags($this->username));
+        $this->phone_number = htmlspecialchars(strip_tags($this->phone_number));
+        $this->location = htmlspecialchars(strip_tags($this->location));
         $this->password = htmlspecialchars(strip_tags($this->password));
-        $this->vid = $this->generateId();
+        $this->restuarant_id = $this->generateId();
         
         // ENCRYPT PASSWORD 
         $md5_password = md5($this->password);
 
         // BIND PARAM 
-        $stmt->bindParam(':name', $this->vname);
-        $stmt->bindParam(':username', $this->vuname);
+        $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':email', $this->email);
-        $stmt->bindParam(':phone', $this->vphone);
-        $stmt->bindParam(':vid', $this->vid);
-        $stmt->bindParam(':location', $this->vlocation);
+        $stmt->bindParam(':phone', $this->phone_number);
+        $stmt->bindParam(':restuarant_id', $this->restuarant_id);
+        $stmt->bindParam(':location', $this->location);
         $stmt->bindParam(':password', $md5_password);
 
         // CHECK IF EMAIL ALREADY EXISTS
@@ -183,7 +183,7 @@ class Restuarant{
             // ENCRYPT PASSWORD 
             $md5_password = md5($this->password); 
 
-            $query = 'SELECT * FROM '.$this->table.' WHERE vemail="'.$this->vemail.'" AND password="'.$md5_password.'"';
+            $query = 'SELECT * FROM '.$this->table.' WHERE vemail="'.$this->vemail.'" AND vpassword="'.$md5_password.'"';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             return $stmt;
@@ -196,30 +196,15 @@ class Restuarant{
         }
     }
 
-    public function storeList(){
+    public function vendorProfile(){
+        // $id = $_SESSION["vid"];
         try {
-            $query = 'SELECT * FROM '.$this->table.' ORDER BY id DESC';
-            $stmt = $this->conn->prepare($query); 
-            $stmt->execute();
-            return $stmt;
-
-        } catch (PDOException $e) {
-            // PRINT ERROR IF QUERY FAILED TO EXECUTE
-            printf("Error %s. \n", $e->getMessage());
-            // return false;  
-            exit;
-        }
-    }
-
-    public function storeinfo(){
-        try {
-            $query = 'SELECT 
-                * 
+            $query = 'SELECT * 
             FROM 
-                '.$this->table.' 
+                '.$this->table.'  
             WHERE 
-                id = ?
-            LIMIT 0,1';
+                vid=? 
+            ';
 
             $stmt = $this->conn->prepare($query); 
 
@@ -237,4 +222,10 @@ class Restuarant{
             exit;
         }
     }
+
+    public function update(){
+        
+    }
+
+    
 }
