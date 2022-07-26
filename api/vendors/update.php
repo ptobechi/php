@@ -23,8 +23,11 @@ foreach($_POST as $name => $value){
     $user->$name =  $value;
 }
 
+$user->authenticate();
+
+
 //RETURNED USER
-$logged_user = $user->login();
+$logged_user = $user->update();
 
 //CHECK COUNT
 $num = $logged_user->rowCount();

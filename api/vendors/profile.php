@@ -14,7 +14,10 @@ $db = $database->connect();
 
 $user = new Vendor($db);
 
+$user->authenticate();
+
 $user->id = isset($_SESSION["vid"]) ? $_SESSION["vid"] : die();
+
 
 //RETURNED USER
 $logged_user = $user->vendorProfile();

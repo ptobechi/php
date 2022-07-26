@@ -8,11 +8,17 @@
 // //CREATE DB CONNECTION
 include_once('../../config/db_conn.php');
 include_once('../../model/products/products.php');
+include_once('../../model/vendors/vendor.php');
+
 
 $database = new Database();
 $db = $database->connect();
 
 $user = new Products($db);
+$auth = new Vendor($db);
+
+//Autthenticate vendor
+$auth->authenticate();
 
 //RETURNED USER
 $logged_user = $user->VendorsproductList();

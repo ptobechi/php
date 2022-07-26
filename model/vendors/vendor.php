@@ -5,6 +5,7 @@ class Vendor{
     private $conn;
     private $table = "vendors";
     private $vid;
+    private $authid;
     
     // USER PARAM 
     public $id;
@@ -19,6 +20,37 @@ class Vendor{
     // ESTABLISH A DATABASE CONNECTION
     public function __construct($db){
         $this->conn = $db;
+    }
+
+    public function authenticate(){
+        
+        $this->authid = isset($_SESSION["vid"]) ? $_SESSION["vid"] : 0;
+
+        try {
+            $query = 'SELECT * FROM '.$this->table.' WHERE vid="'.$this->authid.'"';
+            $stmt = $this->conn->prepare($query); 
+            $stmt->execute();
+            //CHECK COUNT
+            $num = $stmt->rowCount();
+
+            if($num > 0){
+                return true;
+            }else{
+                
+                echo json_encode(
+                    array('status' => '401', 'data' => 'session expired')
+                );
+                // return false;
+                exit;
+            }
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+
+        }
     }
 
     public function generateId(){
@@ -224,7 +256,48 @@ class Vendor{
     }
 
     public function update(){
-        
+         // $id = $_SESSION["vid"];
+         try {
+            $query = 'UPDATE 
+                '.$this->table.' 
+            SET
+                vname=:name,
+                vemail=:email,
+                vphone=:phone,
+                vlocation=:location
+            WHERE 
+                vid=? 
+            ';
+
+            $stmt = $this->conn->prepare($query); 
+
+            // CLEAN USER DATA
+            $this->vname = htmlspecialchars(strip_tags($this->vname));
+            $this->vemail = htmlspecialchars(strip_tags($this->vemail));
+            $this->vphone = htmlspecialchars(strip_tags($this->vphone));
+            $this->vlocation = htmlspecialchars(strip_tags($this->vlocation));
+
+            // BIND PARAM 
+            $stmt->bindParam(':name', $this->vname);
+            $stmt->bindParam(':email', $this->vemail);
+            $stmt->bindParam(':phone', $this->vphone);
+            $stmt->bindParam(':location', $this->vlocation);
+            $stmt->bindParam(1, $this->id);
+            
+            $stmt->execute();
+            
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
+
+    public function delete(){
+
     }
 
     
