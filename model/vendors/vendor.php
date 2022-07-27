@@ -119,41 +119,35 @@ class Vendor{
     }
 
     public function upload(){
-        $id = $this->generateId();
+        try {
+            $query = 'UPDATE 
+                '.$this->table.' 
+            SET
+                vimage=:image
+            WHERE 
+                vid=? 
+            ';
 
-        $fileName = $_FILES['file']['name'];
-        $fileTmpName = $_FILES['file']['tmp_name'];
-        $fileType = $_FILES['file']['type'];
-        $fileSize = $_FILES['file']['size'];
-        $fileError = $_FILES['file']['error'];
+            $stmt = $this->conn->prepare($query); 
 
-        $fileExt = explode('.',$fileName);
-        $fileActualExt = strtolower(end($fileExt));
-        $allowed = array('jpg','pdf','jpeg','png');
+            // CLEAN USER DATA
+            $this->vimage = htmlspecialchars(strip_tags($this->vimage));
 
-        if(in_array($fileActualExt,$allowed)){
-            if($fileError == 0){
-                if($fileSize < 5000000){
-
-                    $fileNameNew = $id.$fileName;
-                    $fileDestination = "../../file manager/";
+            // BIND PARAM 
+            $stmt->bindParam(':image', $this->vimage);
+            $stmt->bindParam(1, $this->id);
             
-                    $move = move_uploaded_file($fileTmpName, "../../file manager/".$fileNameNew);
-                    
-                    return $fileNameNew;
+            $stmt->execute();
+            
+            return $stmt;
 
-                }else{
-                    // IF FILE SIZE IS MORE THAN 5mb 
-                    exit;
-                }
-            }else{
-                 // IF FILE IS CURROUPT | UNKWONN  | NOT SUPPORTED
-                 exit;
-            }
-        }else{
-             // IF FILE NOT SUPPORTED 
-             exit;
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
         }
+        
 
     }
 

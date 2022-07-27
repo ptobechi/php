@@ -12,7 +12,7 @@ include_once('../../model/admin/restuarant.php');
 $database = new Database();
 $db = $database->connect();
 
-$data = new Restuarant($db);
+$data = new Vendor($db);
 
 // GET RAW DATA FROM API REQUEST 
 // LOOK INTO THIS TO FIX LATER AND CHECK FOR ALTERNATIVE THAT ACCEPTS (MULTI-PART/FORM-data)
