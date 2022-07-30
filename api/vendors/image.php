@@ -13,8 +13,8 @@
     $db = $database->connect();
     $data = new Vendor($db);
     $data->authenticate(); //Authenticate session
-    $data->vimage =  $_FILES['image']['name'];
     $data->id =  $_SESSION["vid"];
+    
 
     if(isset($_FILES['image']['name'])){
         
@@ -50,20 +50,23 @@
 // exit;
     if($response = 1){
         // SEND DATA TO MODEL FOR INSERTION
+        $data->vimage =  $rename;
+
+        // die;
         if($data->upload()){
             echo json_encode(
-                array('status' => '201', 'data' => '')
+                array('status' => '201', 'data' => 'Upload Sucessful')
             );
             exit;
         }else{
             echo json_encode(
-                array('status' => '400', 'data'=> '')
+                array('status' => '400', 'data'=> 'Upload Failed')
             );
             exit;
         }
     }else{
         echo json_encode(
-            array('status' => '400', 'data'=> 'The file <b>'. $_FILES['image']['name']. '</b> exceeds the maximum permitted size <i>'. $max_size. 'KB</i>' )
+            array('status' => '400', 'data'=> 'The file '. $_FILES['image']['name'].' '.' exceeds the maximum permitted size '. $max_size.' '. ' KB' )
         );
         exit;
     }

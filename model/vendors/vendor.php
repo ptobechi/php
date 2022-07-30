@@ -123,10 +123,10 @@ class Vendor{
             $query = 'UPDATE 
                 '.$this->table.' 
             SET
-                vimage=:image
+                vimage=:vimage
             WHERE 
-                vid=? 
-            ';
+                vid='.$this->id.'
+            '; 
 
             $stmt = $this->conn->prepare($query); 
 
@@ -134,8 +134,7 @@ class Vendor{
             $this->vimage = htmlspecialchars(strip_tags($this->vimage));
 
             // BIND PARAM 
-            $stmt->bindParam(':image', $this->vimage);
-            $stmt->bindParam(1, $this->id);
+            $stmt->bindParam(':vimage', $this->vimage);
             
             $stmt->execute();
             
@@ -250,7 +249,6 @@ class Vendor{
     }
 
     public function update(){
-         // $id = $_SESSION["vid"];
          try {
             $query = 'UPDATE 
                 '.$this->table.' 
@@ -260,7 +258,7 @@ class Vendor{
                 vphone=:phone,
                 vlocation=:location
             WHERE 
-                vid=? 
+                vid='.$this->id.'
             ';
 
             $stmt = $this->conn->prepare($query); 
@@ -276,16 +274,21 @@ class Vendor{
             $stmt->bindParam(':email', $this->vemail);
             $stmt->bindParam(':phone', $this->vphone);
             $stmt->bindParam(':location', $this->vlocation);
-            $stmt->bindParam(1, $this->id);
+            // $stmt->bindParam(1, $this->id);/s
             
             $stmt->execute();
             
-            return $stmt;
+            echo json_encode(
+                array('status' => '200', 'data' => 'Update successful')
+            );
 
         } catch (PDOException $e) {
             // PRINT ERROR IF QUERY FAILED TO EXECUTE
-            printf("Error %s. \n", $e->getMessage());
+            // printf("Error %s. \n", $e->getMessage());
             // return false;  
+            echo json_encode(
+                array('status' => '200', 'data' => "Update failed")
+            );
             exit;
         }
     }
