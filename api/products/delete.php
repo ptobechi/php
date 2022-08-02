@@ -7,38 +7,33 @@
 
 // //CREATE DB CONNECTION
 include_once('../../config/db_conn.php');
-include_once('../../model/orders/orders.php');
+include_once('../../model/products/products.php');
+include_once('../../model/vendors/vendor.php');
+
 
 $database = new Database();
 $db = $database->connect();
 
-$user = new Order($db);
+// AUTHENTICATE VENDOR 
+$vendor = new Vendor($db);
+$vendor->authenticate();
 
-//Autthenticate user
-// $auth->authenticate();
+$product = new Products($db);
 
 // GET RAW DATA FROM API REQUEST 
 // LOOK INTO THIS TO FIX LATER AND CHECK FOR ALTERNATIVE THAT ACCEPTS (MULTI-PART/FORM-data)
 // $data = json_decode(file_get_contents("php://input"));
 
-// GET PARSED DATA FROM REQUEST  
-// echo $_POST["orders"];
-// print_r(json_encode($_POST["orders"]));
-// die;
+// GET PARSED DATA FROM REQUEST 
 foreach($_POST as $name => $value){
-    $user->$name =  $value;
+    $product->$name =  $value;
 }
 
+$product->vid = $_SESSION["vid"];
+
 // SEND DATA TO MODEL FOR INSERTION
-if($user->register()){
-    echo json_encode(
-        array('status' => '201', 'data' => 'order placed successful')
-    );
-}else{
-    echo json_encode(
-        array('status' => '400', 'data' => 'unable to place an order atthe moment')
-    );
-}
+$product->delete()
+
 
 
 

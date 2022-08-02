@@ -4,15 +4,14 @@ class Products{
     // DB PARAM 
     private $conn;
     private $table = "products";
-    private $pid;
-    private $vid;
     
     // USER PARAM 
     public $pcategory;
     public $pname;
     public $pamount;
+    public $pid;
+    public $vid;
     
-
     // ESTABLISH A DATABASE CONNECTION
     public function __construct($db){
         $this->conn = $db;
@@ -170,5 +169,37 @@ class Products{
             // return false;  
             exit;
         }
+    }
+
+    public function delete(){
+        try {
+            $query = 'DELETE 
+                FROM 
+                '.$this->table.' 
+            WHERE 
+                pid = '.$this->pid.' AND vid='.$this->vid.'
+            ';
+
+            $stmt = $this->conn->prepare($query); 
+
+            if($stmt->execute()){
+                echo json_encode(
+                    array('status' => '201', 'data' => 'done')
+                );
+            }else{
+                echo json_encode(
+                    array('status' => '400', 'data' => 'failed')
+                );
+            }
+            
+            
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+
     }
 }

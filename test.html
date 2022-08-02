@@ -23,56 +23,44 @@
         e.preventDefault();
         // alert("okay")
 
-         // let orders = [
-        //         {
-        //             product: "Rice",
-        //             price: "1200",
-        //             qty: "2",
-        //         },
-        //         {
-        //             product: "Beans",
-        //             price: "200",
-        //             qty: "2",
-        //         },
-        //         {
-        //             product: "Stew",
-        //             price: "100",
-        //             qty: "1",
-        //         },
-        //     ];
-    // let cartItems = {};
-    // cartItems = JSON.parse(orders);
+         let orders = [
+                {
+                    product: "Rice",
+                    price: "1200",
+                    qty: "2",
+                },
+                {
+                    product: "Beans",
+                    price: "200",
+                    qty: "2",
+                },
+                {
+                    product: "Stew",
+                    price: "100",
+                    qty: "1",
+                },
+            ];
+        // let cartItems = {};
+        // cartItems = JSON.parse(orders);
 
-    
         // for (let i = 0; i < product.length; i++) {
         //     orders.push({"product": product[i].value, "price": price[i].value, "qty": quantity[i].value, "img": image[i].value });
         // }
 
         let data = {
-            // email: "tobechipaschal@gmail.com",
-            // name: "Ghost Store",
-            // username: "ghost01",
-            // phone_number: "08063127213",
-            vemail: document.getElementById("useremail").value,
-            // // cover: document.getElementById("cover_img").files,
-            password: document.getElementById("userpassword").value
-            // price: 1200,.
-            // orders: JSON.stringify(orders)
+            orders: orders,
+            // orders: JSON.stringify(orders),
+            vendorid: 901829
         }
         
         $.ajax({
-            url: "api/vendors/login.php",
+            url: "api/orders/takeOrder.php",
             method: "POST",
             enctype: 'multipart/form-data',
             data: data,
             success: function (data) {
                 console.log(data)
-                // alert(datas)
-                if(data.status == "200"){
-                    alert("redirect")
-                }else{
-                    alert("failed")
-                }
+                alert(data)
             },
             error: function (e) {
                 console.log("ERROR : ", e);

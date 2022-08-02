@@ -20,7 +20,6 @@ $auth = new Vendor($db);
 //Autthenticate vendor
 $auth->authenticate();
 
-
 $user->id = isset($_GET["id"]) ? $_GET["id"] : die();
 
 //RETURNED USER
@@ -28,7 +27,7 @@ $logged_user = $user->vendorOrderInfo();
 
 //CHECK COUNT
 $num = $logged_user->rowCount();
-
+ 
 if($num > 0){
     $data_arr = array();
     $data_arr["status"] = "200";

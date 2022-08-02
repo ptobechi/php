@@ -4,15 +4,12 @@ class Order{
     // DB PARAM 
     private $conn;
     private $table = "orders";
-    // private $userid;
     
     // USER PARAM 
-    // public $firstname;
-    // public $lastname;
     public $orders;
-    // public $userid;
-    // public $phone_number;
-    // public $password;
+    public $vendorid;
+    public $orderid;
+    public $status;
 
     // ESTABLISH A DATABASE CONNECTION
     public function __construct($db){
@@ -62,29 +59,23 @@ class Order{
                         oid=:orderid,
                         vid=:vendorid,
                         uid=:userid,
-                        ocontent=:requeste,
-                        desc="Nothing"';
+                        ocontent=:requeste
+        ';
 
         // PREPARE STATEMENT FOR INSERTING
         $stmt = $this->conn->prepare($query);
 
         // CLEAN USER DATA
-        $this->userid = 9557529;
-        // $this->orders = htmlspecialchars(strip_tags($this->orders));
+        $this->userid = 162671;
+        $vendorid = 901829;
         $this->orderid = $this->generateId();
-        // $orders = "okau";
-        
-        // ENCRYPT PASSWORD 
-        // $md5_password = md5($this->password);
+        $orders = json_encode($this->orders);
 
         // BIND PARAM 
         $stmt->bindParam(':orderid', $this->orderid);
-        $stmt->bindParam(':vendorid', $this->vendorid);
-        $stmt->bindParam(':requeste', $this->orders);
+        $stmt->bindParam(':vendorid', $vendorid);
+        $stmt->bindParam(':requeste', $orders);
         $stmt->bindParam(':userid', $this->userid);
-
-        // CHECK IF EMAIL ALREADY EXISTS
-        // $this->checkEmail();
 
         // EXECUTE THE QUERY
         if($stmt->execute()){
@@ -220,4 +211,39 @@ class Order{
             exit;
         }
     }
+
+    public function updateStatus(){
+        try {
+           $query = 'UPDATE 
+               '.$this->table.' 
+           SET
+               status=:status
+           WHERE 
+               vid='.$this->vendorid.' AND oid='.$this->orderid.'
+           ';
+
+           $stmt = $this->conn->prepare($query); 
+
+           // CLEAN USER DATA
+           $this->status = htmlspecialchars(strip_tags($this->status));
+
+           // BIND PARAM 
+           $stmt->bindParam(':status', $this->status);
+           
+           $stmt->execute();
+           
+           echo json_encode(
+               array('status' => '200', 'data' => 'Update successful')
+           );
+
+       } catch (PDOException $e) {
+           // PRINT ERROR IF QUERY FAILED TO EXECUTE
+           // printf("Error %s. \n", $e->getMessage());
+           // return false;  
+           echo json_encode(
+               array('status' => '200', 'data' => "Update failed")
+           );
+           exit;
+       }
+   }
 }
