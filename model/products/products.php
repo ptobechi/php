@@ -62,7 +62,7 @@ class Products{
                         pcategory=:category,
                         pname=:name,
                         pamount=:price,
-                        status="1" ';
+                        pstatus="1" ';
 
         // PREPARE STATEMENT FOR INSERTING
         $stmt = $this->conn->prepare($query);
@@ -201,5 +201,40 @@ class Products{
             exit;
         }
 
+    }
+
+    public function updateStatus(){
+        try {
+           $query = 'UPDATE 
+               '.$this->table.' 
+           SET
+               pstatus=:status
+           WHERE 
+               vid='.$this->vid.' AND pid='.$this->pid.'
+           ';
+
+           $stmt = $this->conn->prepare($query); 
+
+           // CLEAN USER DATA
+           $this->status = htmlspecialchars(strip_tags($this->status));
+
+           // BIND PARAM 
+           $stmt->bindParam(':status', $this->status);
+           
+           $stmt->execute();
+           
+           echo json_encode(
+               array('status' => '200', 'data' => 'Update successful')
+           );
+
+       } catch (PDOException $e) {
+           // PRINT ERROR IF QUERY FAILED TO EXECUTE
+           // printf("Error %s. \n", $e->getMessage());
+           // return false;  
+           echo json_encode(
+               array('status' => '200', 'data' => "Update failed")
+           );
+           exit;
+       }
     }
 }

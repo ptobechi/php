@@ -4,16 +4,18 @@ class Vendor{
     // DB PARAM 
     private $conn;
     private $table = "vendors";
-    private $vid;
     private $authid;
     
     // USER PARAM 
     public $id;
+    public $vid;
     public $vname;
     public $vemail;
     public $vuname;
     public $vphone;
-    public $vlocation;
+    public $vbank;
+    public $vaccount;
+    public $vaccount_no;
     public $vimage;
     public $password;
 
@@ -256,7 +258,10 @@ class Vendor{
                 vname=:name,
                 vemail=:email,
                 vphone=:phone,
-                vlocation=:location
+                vlocation=:location,
+                vbank=:bank,
+                vaccount=:account,
+                vaccount_no=:account_no
             WHERE 
                 vid='.$this->id.'
             ';
@@ -268,12 +273,18 @@ class Vendor{
             $this->vemail = htmlspecialchars(strip_tags($this->vemail));
             $this->vphone = htmlspecialchars(strip_tags($this->vphone));
             $this->vlocation = htmlspecialchars(strip_tags($this->vlocation));
+            $this->vbank = htmlspecialchars(strip_tags($this->vbank));
+            $this->vaccount = htmlspecialchars(strip_tags($this->vaccount));
+            $this->vaccount_no = htmlspecialchars(strip_tags($this->vaccount_no));
 
             // BIND PARAM 
             $stmt->bindParam(':name', $this->vname);
             $stmt->bindParam(':email', $this->vemail);
             $stmt->bindParam(':phone', $this->vphone);
             $stmt->bindParam(':location', $this->vlocation);
+            $stmt->bindParam(':bank', $this->vbank);
+            $stmt->bindParam(':account', $this->vaccount);
+            $stmt->bindParam(':account_no', $this->vaccount_no);
             // $stmt->bindParam(1, $this->id);/s
             
             $stmt->execute();
@@ -293,9 +304,41 @@ class Vendor{
         }
     }
 
-    public function delete(){
+    public function updateStatus(){
+        try {
+           $query = 'UPDATE 
+               '.$this->table.' 
+           SET
+               vstatus=:status
+           WHERE 
+               vid='.$this->vid.'
+           ';
 
+           $stmt = $this->conn->prepare($query); 
+
+           // CLEAN USER DATA
+           $this->status = htmlspecialchars(strip_tags($this->status));
+
+           // BIND PARAM 
+           $stmt->bindParam(':status', $this->status);
+           
+           $stmt->execute();
+           
+           echo json_encode(
+               array('status' => '200', 'data' => 'Update successful')
+           );
+
+       } catch (PDOException $e) {
+           // PRINT ERROR IF QUERY FAILED TO EXECUTE
+           // printf("Error %s. \n", $e->getMessage());
+           // return false;  
+           echo json_encode(
+               array('status' => '200', 'data' => "Update failed")
+           );
+           exit;
+       }
     }
+
 
     
 }

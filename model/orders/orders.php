@@ -217,7 +217,7 @@ class Order{
            $query = 'UPDATE 
                '.$this->table.' 
            SET
-               status=:status
+               ostatus=:status
            WHERE 
                vid='.$this->vendorid.' AND oid='.$this->orderid.'
            ';
@@ -245,5 +245,5 @@ class Order{
            );
            exit;
        }
-   }
+    }
 }

@@ -53,7 +53,7 @@ class Database{
             `vpassword` VARCHAR(50) NOT NULL ,  
             `vimage` VARCHAR(255) NOT NULL ,  
             `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
-            `status` VARCHAR(11) NOT NULL ,  
+            `vstatus` VARCHAR(11) NOT NULL ,  
             PRIMARY KEY  (`id`),
             UNIQUE (`vid`) 
         )ENGINE = InnoDB;");
@@ -70,7 +70,7 @@ class Database{
             `pname` VARCHAR(255) NOT NULL , 
             `pamount` VARCHAR(20) NOT NULL , 
             `others` VARCHAR(255) NOT NULL , 
-            `status` VARCHAR(11) NOT NULL ,  
+            `vstatus` VARCHAR(11) NOT NULL ,  
             `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
             PRIMARY KEY  (`id`),
             FOREIGN KEY (`vid`) REFERENCES vendors(`vid`)
@@ -87,7 +87,7 @@ class Database{
             `oid` INT(11) NOT NULL , 
             `ocontent` VARCHAR(1025) NOT NULL , 
             `desc` VARCHAR(255) NOT NULL , 
-            `status` INT(11) NOT NULL ,  
+            `ostatus` INT(11) NOT NULL ,  
             `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
             PRIMARY KEY  (`id`),
             FOREIGN KEY (`uid`) REFERENCES register(`uid`),
