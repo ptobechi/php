@@ -246,4 +246,29 @@ class Order{
            exit;
        }
     }
+
+    public function totalOrders(){
+        try {
+            $query = 'SELECT * 
+            FROM 
+                '.$this->table.'  
+            WHERE 
+                status=? 
+            ';
+
+            $stmt = $this->conn->prepare($query); 
+
+            //BIND PARAM
+            $stmt->bindParam(1, $this->status);
+            
+            $stmt->execute();
+            
+            return $stmt;
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
 }

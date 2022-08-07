@@ -338,7 +338,5 @@ class Vendor{
            exit;
        }
     }
-
-
     
 }
