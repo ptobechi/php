@@ -237,4 +237,46 @@ class Products{
            exit;
        }
     }
+
+    // TRENDING RESTURANTS
+    public function trendingProducts(){
+        try {
+            $query = 'SELECT * 
+                FROM 
+            '.$this->table.' ';
+
+            $stmt = $this->conn->prepare($query); 
+            
+            $stmt->execute();
+            
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
+
+    // AVAILABLE RESTURANTdS
+    public function availableProducts(){
+        try {
+            $query = 'SELECT * 
+                FROM 
+            '.$this->table.' ';
+
+            $stmt = $this->conn->prepare($query); 
+            
+            $stmt->execute();
+            
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
 }

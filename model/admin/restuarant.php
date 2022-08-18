@@ -1,6 +1,6 @@
 <?php
 
-class Restuarant{
+class Vendor{
     // DB PARAM 
     private $conn;
     private $table = "vendors";
@@ -136,7 +136,7 @@ class Restuarant{
                         vphone=:phone,
                         vlocation=:location,
                         vuname=:username,
-                        password=:password ';
+                        vpassword=:password ';
 
         // PREPARE STATEMENT FOR INSERTING
         $stmt = $this->conn->prepare($query);

@@ -202,7 +202,7 @@ class Vendor{
         printf("Error %s. \n", $stmt->error);
         return false; 
         exit;   
-    }
+    } 
 
     // USER LOGIN AUTHYENTICATION
     public function login(){
@@ -340,7 +340,7 @@ class Vendor{
     }
 
     // TRENDING RESTURANTS
-    public function trendingRestuarants(){
+    public function tVendors(){
         try {
             $query = 'SELECT * 
                 FROM 
@@ -361,7 +361,7 @@ class Vendor{
     }
 
     // AVAILABLE RESTURANTdS
-    public function availableRestuarants(){
+    public function aVendors(){
         try {
             $query = 'SELECT * 
                 FROM 
