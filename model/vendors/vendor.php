@@ -338,5 +338,47 @@ class Vendor{
            exit;
        }
     }
+
+    // TRENDING RESTURANTS
+    public function trendingRestuarants(){
+        try {
+            $query = 'SELECT * 
+                FROM 
+            '.$this->table.' ';
+
+            $stmt = $this->conn->prepare($query); 
+            
+            $stmt->execute();
+            
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
+
+    // AVAILABLE RESTURANTdS
+    public function availableRestuarants(){
+        try {
+            $query = 'SELECT * 
+                FROM 
+            '.$this->table.' ';
+
+            $stmt = $this->conn->prepare($query); 
+            
+            $stmt->execute();
+            
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
     
 }
