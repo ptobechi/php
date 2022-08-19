@@ -7,11 +7,12 @@ class userAccess{
     private $userid;
     
     // USER PARAM 
+    public $name;
     public $firstname;
     public $lastname;
     public $email;
     public $username;
-    public $phone_number;
+    public $phone;
     public $password;
 
     // ESTABLISH A DATABASE CONNECTION
@@ -27,7 +28,7 @@ class userAccess{
         $id = $explode[1];  
 
         try {
-            $query = 'SELECT * FROM '.$this->table.' WHERE userid='.$id.'';
+            $query = 'SELECT * FROM '.$this->table.' WHERE uid='.$id.'';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             //CHECK COUNT
@@ -38,7 +39,7 @@ class userAccess{
                     $explode = explode('.', $gen);
                     $id = $explode[1]; 
 
-                    $query = 'SELECT * FROM '.$this->table.' WHERE userid='.$id.'';
+                    $query = 'SELECT * FROM '.$this->table.' WHERE uid='.$id.'';
                     $stmt = $this->conn->prepare($query); 
                     $stmt->execute();
                     $num = $stmt->rowCount();
@@ -56,15 +57,16 @@ class userAccess{
 
     public function checkEmail(){
         try {
-            $query = 'SELECT * FROM '.$this->table.' WHERE email="'.$this->email.'"';
+            $query = 'SELECT * FROM '.$this->table.' WHERE uemail="'.$this->email.'"';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             //CHECK COUNT
             $num = $stmt->rowCount();
 
             if($num > 0){
-                echo("Email address already exists");
-                // return false;
+                echo json_encode(
+                    array('status' => '400', 'data' => 'Email address already exists')
+                );
                 exit;
     
             }else{
@@ -81,23 +83,54 @@ class userAccess{
 
     }
 
+    public function authenticate(){
+        
+        $this->authid = isset($_SESSION["uid"]) ? $_SESSION["uid"] : 0;
+
+        try {
+            $query = 'SELECT * FROM '.$this->table.' WHERE uid="'.$this->authid.'"';
+            $stmt = $this->conn->prepare($query); 
+            $stmt->execute();
+            //CHECK COUNT
+            $num = $stmt->rowCount();
+
+            if($num > 0){
+                return true;
+            }else{
+                
+                echo json_encode(
+                    array('status' => '505', 'data' => 'session expired')
+                );
+                // return false;
+                exit;
+            }
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+
+        }
+    }
+
     // USERS REGISTRATION
-    public function register(){
+    public function register(){ 
         // CREATE QUERY
         $query = 'INSERT INTO '.$this->table.'
                     SET
-                        userid=:userid,
-                        firstname=:firstname,
-                        lastname=:lastname,
-                        email=:email,
-                        password=:password';
+                        uid         =:userid,
+                        ufirstname   =:name,
+                        uphone      =:phone,
+                        uemail      =:email,
+                        upassword   =:password';
 
         // PREPARE STATEMENT FOR INSERTING
         $stmt = $this->conn->prepare($query);
 
         // CLEAN USER DATA
-        $this->firtsname = htmlspecialchars(strip_tags($this->firstname));
-        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+        $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->phone = htmlspecialchars(strip_tags($this->phone));
         $this->email = htmlspecialchars(strip_tags($this->email));
         $this->password = htmlspecialchars(strip_tags($this->password));
         $this->userid = $this->generateId();
@@ -106,8 +139,8 @@ class userAccess{
         $md5_password = md5($this->password);
 
         // BIND PARAM 
-        $stmt->bindParam(':firstname', $this->firstname);
-        $stmt->bindParam(':lastname', $this->lastname);
+        $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':phone', $this->phone);
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':password', $md5_password);
         $stmt->bindParam(':userid', $this->userid);
@@ -131,7 +164,7 @@ class userAccess{
             // ENCRYPT PASSWORD 
             $md5_password = md5($this->password); 
 
-            $query = 'SELECT * FROM '.$this->table.' WHERE email="'.$this->email.'" AND password="'.$md5_password.'"';
+            $query = 'SELECT * FROM '.$this->table.' WHERE uemail="'.$this->email.'" AND upassword="'.$md5_password.'"';
             $stmt = $this->conn->prepare($query); 
             $stmt->execute();
             return $stmt;
@@ -187,4 +220,32 @@ class userAccess{
             exit;
         }
     }
+
+    public function userProfile(){
+        // $id = $_SESSION["vid"];
+        try {
+            $query = 'SELECT * 
+            FROM 
+                '.$this->table.'  
+            WHERE 
+                uid=? 
+            ';
+
+            $stmt = $this->conn->prepare($query); 
+
+            //BIND PARAM
+            $stmt->bindParam(1, $this->id);
+            
+            $stmt->execute();
+            
+            return $stmt;
+
+        } catch (PDOException $e) {
+            // PRINT ERROR IF QUERY FAILED TO EXECUTE
+            printf("Error %s. \n", $e->getMessage());
+            // return false;  
+            exit;
+        }
+    }
+
 }

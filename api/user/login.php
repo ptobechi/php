@@ -35,17 +35,17 @@ if($num > 0){
     
     while($row = $logged_user->fetch(PDO::FETCH_ASSOC)){
         extract($row); //GIVE US DIRECT ACESS TO COLUMUN NAME email, userid WITHOUT $row --- ($row[email], $row['password'], $row['userid'])
-        $_SESSION["userid"] = $userid;
+        $_SESSION["uid"] = $uid;
     }
 
     echo json_encode(
-        array('status' => '200')
+        array('status' => '200', 'data' => 'Login Successful')
     );
 
 
 }else{
     echo json_encode(
-        array('status' => '400')
+        array('status' => '400', 'data' => 'Login Failed')
     );
 }
 

@@ -26,11 +26,11 @@ foreach($_POST as $name => $value){
 // SEND DATA TO MODEL FOR INSERTION
 if($user->register()){
     echo json_encode(
-        array('status' => '201')
+        array('status' => '201', 'data' => 'Registration Successful')
     );
 }else{
     echo json_encode(
-        array('status' => '400')
+        array('status' => '400', 'data' => 'Registration Failed')
     );
 }
 
