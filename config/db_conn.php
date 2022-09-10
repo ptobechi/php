@@ -21,88 +21,45 @@ class Database{
 
         return $this->conn;
     }
-    // e10adc3949ba59abbe56e057f20f883e
-    protected function CreateDataTables(){
-        $query = ("CREATE TABLE IF NOT EXISTS register ( 
-            `id` INT NOT NULL AUTO_INCREMENT ,
-            `uid` INT(11) NOT NULL , 
-            `ufirstname` VARCHAR(100) NOT NULL , 
-            `ulastname` VARCHAR(100) NOT NULL , 
-            `uemail` VARCHAR(100) NOT NULL , 
-            `uphone` VARCHAR(20) NOT NULL , 
-            `ulocation` VARCHAR(20) NOT NULL , 
-            `upassword` VARCHAR(50) NOT NULL ,  
-            `ustatus` INT(11) NOT NULL ,   
-            `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
-            PRIMARY KEY  (`id`),
-            UNIQUE (`uid`) 
-        )ENGINE = InnoDB;");
-        // PREPARE STATEMENT FOR INSERTING
-        $stmt = $this->conn->prepare($query);
-        // EXECUTE THE QUERY
-        $stmt->execute();
 
+    protected function CreateDataTables(){
         $query = ("CREATE TABLE IF NOT EXISTS vendors ( 
             `id` INT NOT NULL AUTO_INCREMENT ,
-            `vid` INT(11) NOT NULL , 
+            `pkey` VARCHAR(50) NOT NULL , 
+            `vid` VARCHAR(10) NOT NULL , 
             `vname` VARCHAR(255) NOT NULL , 
-            `vemail` VARCHAR(50) NOT NULL , 
-            `vphone` VARCHAR(12) NOT NULL ,  
+            `vcontact` VARCHAR(100) NOT NULL , 
             `vlocation` VARCHAR(255) NOT NULL , 
-            `vuname` VARCHAR(50) NOT NULL ,  
-            `vpassword` VARCHAR(50) NOT NULL ,  
             `vimage` VARCHAR(255) NOT NULL ,  
-            `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
+            `vopen_at` DATETIME NOT NULL ,  
             `vstatus` VARCHAR(11) NOT NULL ,  
+            `vcreated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
             PRIMARY KEY  (`id`),
-            UNIQUE (`vid`) 
+            UNIQUE (`vid`), 
+            UNIQUE (`pkey`) 
         )ENGINE = InnoDB;");
-        // PREPARE STATEMENT FOR INSERTING
-        $stmt = $this->conn->prepare($query);
-        // EXECUTE THE QUERY
-        $stmt->execute();
+        $stmt = $this->conn->prepare($query);// PREPARE STATEMENT FOR INSERTING
+        $stmt->execute(); // EXECUTE THE QUERY
 
         $query = ("CREATE TABLE IF NOT EXISTS products ( 
             `id` INT NOT NULL AUTO_INCREMENT ,
-            `pid` INT(11) NOT NULL , 
-            `vid` INT(11) NOT NULL , 
-            `pcategory` VARCHAR(255) NOT NULL , 
-            `pname` VARCHAR(255) NOT NULL , 
-            `pamount` VARCHAR(20) NOT NULL , 
-            `others` VARCHAR(255) NOT NULL , 
-            `vstatus` VARCHAR(11) NOT NULL ,  
+            `pid` VARCHAR(10) NOT NULL , 
+            `vid` VARCHAR(10) NOT NULL , 
+            `pcategory` VARCHAR(100) NOT NULL , 
+            `pname` VARCHAR(100) NOT NULL , 
+            `pamount` VARCHAR(50) NOT NULL , 
+            `paddons` VARCHAR(255) NOT NULL , 
+            `pimage` VARCHAR(50) NOT NULL ,  
+            `pstatus` INT(11) NOT NULL ,  
             `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
             PRIMARY KEY  (`id`),
             FOREIGN KEY (`vid`) REFERENCES vendors(`vid`)
         )ENGINE = InnoDB;");
-        // PREPARE STATEMENT FOR INSERTING
-        $stmt = $this->conn->prepare($query);
-        // EXECUTE THE QUERY
-        $stmt->execute();
-
-        $query = ("CREATE TABLE IF NOT EXISTS orders ( 
-            `id` INT NOT NULL AUTO_INCREMENT ,
-            `vid` INT(11) NOT NULL , 
-            `uid` INT(11) NOT NULL , 
-            `oid` INT(11) NOT NULL , 
-            `ocontent` VARCHAR(1025) NOT NULL , 
-            `desc` VARCHAR(255) NOT NULL , 
-            `ostatus` INT(11) NOT NULL ,  
-            `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
-            PRIMARY KEY  (`id`),
-            FOREIGN KEY (`uid`) REFERENCES register(`uid`),
-            FOREIGN KEY (`vid`) REFERENCES vendors(`vid`)
-        )ENGINE = InnoDB;");
-        // PREPARE STATEMENT FOR INSERTING
-        $stmt = $this->conn->prepare($query);
-        // EXECUTE THE QUERY
-        $stmt->execute();
+        $stmt = $this->conn->prepare($query);  // PREPARE STATEMENT FOR INSERTING
+        $stmt->execute();  // EXECUTE THE QUERY
    
     }
 
     
 }
 
-// $p = new Database;
-// $p->connect();
-// $p->CreateDataTables();

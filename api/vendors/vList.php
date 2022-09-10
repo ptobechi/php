@@ -7,35 +7,35 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type
 
 // //CREATE DB CONNECTION
 include_once('../../config/db_conn.php');
-include_once('../../model/vendors/vendor.php');
+include_once('../../model/get.php');
 
 
 $database = new Database();
 $db = $database->connect();
 
-$vendors = new Vendor($db);
+$vList = new Chowbox($db);
 
-//RETURNED USER
-$vendor = $vendors->tVendors();
+//RETURNED Vendors
+$list = $vList->Vendors();
 
 //CHECK COUNT
-$num = $vendor->rowCount();
+$num = $list->rowCount();
 
 if($num > 0){
     $data_arr = array();
     $data_arr["status"] = "200";
     $data_arr["data"] = array();
     
-    while($row = $vendor->fetch(PDO::FETCH_ASSOC)){
-        array_push($data_arr["data"], $row);
+    while($row = $list->fetch(PDO::FETCH_ASSOC)){
+        extract($row); //GIVE US DIRECT ACESS TO COLUMUN NAME email, userid WITHOUT $row --- ($row[email], $row['password'], $row['userid'])
+        $data = array('id'=>$vid, 'vendor'=>$vname,'location'=>$vlocation, 'image'=>$vimage);
+        array_push($data_arr["data"], $data);
     }
-
     echo json_encode($data_arr);
-
 
 }else{
     echo json_encode(
-        array('status' => '400')
+        array('status' => '400', 'data' => '')
     );
 }
 
