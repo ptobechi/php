@@ -7,7 +7,7 @@ class Database{
     private $username = "root";
     private $password = "";
     private $conn;
-
+    // e10adc3949ba59abbe56e057f20f883e
     public function connect(){
         $this->conn = null;
         try {
@@ -23,9 +23,24 @@ class Database{
     }
 
     protected function CreateDataTables(){
+        $query = ("CREATE TABLE IF NOT EXISTS register ( 
+            `id` INT NOT NULL AUTO_INCREMENT ,
+            `uid` VARCHAR(10) NOT NULL , 
+            `ufname` VARCHAR(100) NOT NULL , 
+            `ulname` VARCHAR(100) NOT NULL , 
+            `ucontact` VARCHAR(100) NOT NULL , 
+            `uimage` VARCHAR(255) NOT NULL ,  
+            `ustatus` VARCHAR(11) NOT NULL ,  
+            `upassword` VARCHAR(100) NOT NULL ,  
+            `ucreated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
+            PRIMARY KEY  (`id`),
+            UNIQUE (`uid`)
+        )ENGINE = InnoDB;");
+        $stmt = $this->conn->prepare($query);// PREPARE STATEMENT FOR INSERTING
+        $stmt->execute(); // EXECUTE THE QUERY
+
         $query = ("CREATE TABLE IF NOT EXISTS vendors ( 
             `id` INT NOT NULL AUTO_INCREMENT ,
-            `pkey` VARCHAR(50) NOT NULL , 
             `vid` VARCHAR(10) NOT NULL , 
             `vname` VARCHAR(255) NOT NULL , 
             `vcontact` VARCHAR(100) NOT NULL , 
@@ -33,10 +48,10 @@ class Database{
             `vimage` VARCHAR(255) NOT NULL ,  
             `vopen_at` DATETIME NOT NULL ,  
             `vstatus` VARCHAR(11) NOT NULL ,  
+            `vpassword` VARCHAR(11) NOT NULL ,  
             `vcreated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
             PRIMARY KEY  (`id`),
-            UNIQUE (`vid`), 
-            UNIQUE (`pkey`) 
+            UNIQUE (`vid`)
         )ENGINE = InnoDB;");
         $stmt = $this->conn->prepare($query);// PREPARE STATEMENT FOR INSERTING
         $stmt->execute(); // EXECUTE THE QUERY

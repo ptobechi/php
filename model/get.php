@@ -5,8 +5,11 @@ class Chowbox{
     private $conn;
     private $vendor = "vendors";
     private $products = "products";
+    private $users = "register";
 
     public $id;
+    public $email;
+    public $password;
 
     // ESTABLISH A DATABASE CONNECTION
     public function __construct($db){
@@ -49,6 +52,58 @@ class Chowbox{
 
             //BIND PARAM
             $stmt->bindParam(1, $this->id);
+            $stmt->execute();
+            return $stmt;
+
+        } catch (PDOException $error) {
+            printf("Error %s. \n", $error->getMessage());
+            exit;
+        }
+    }
+
+    public function login(){
+        try {
+            $query = "SELECT * 
+                        FROM
+                    $this->users
+                WHERE
+                    username= :email AND upassword=:pass            
+            ";
+
+            $stmt = $this->conn->prepare($query); 
+            // CLEAN USER DATA
+            $this->email = htmlspecialchars(strip_tags($this->email));
+            $this->password = htmlspecialchars(strip_tags($this->password));
+
+            //BIND PARAM
+            $stmt->bindParam(':email', $this->email);
+            $stmt->bindParam(':pass', $this->password);
+            
+            $stmt->execute();
+            return $stmt;
+
+        } catch (PDOException $error) {
+            printf("Error %s. \n", $error->getMessage());
+            exit;
+        }
+    }
+
+    public function userInfo(){
+        try {
+            $query = "SELECT * 
+                        FROM
+                    $this->users
+                WHERE
+                    uid= ?            
+            ";
+
+            $stmt = $this->conn->prepare($query); 
+            // CLEAN USER DATA
+            $this->id = htmlspecialchars(strip_tags($this->id));
+
+            //BIND PARAM
+            $stmt->bindParam(1, $this->id);
+            
             $stmt->execute();
             return $stmt;
 
