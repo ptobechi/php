@@ -6,6 +6,7 @@ class Chowbox{
     private $vendor = "vendors";
     private $products = "products";
     private $users = "register";
+    private $order = "sales";
 
     public $id;
     public $email;
@@ -103,6 +104,33 @@ class Chowbox{
 
             //BIND PARAM
             $stmt->bindParam(1, $this->id);
+            
+            $stmt->execute();
+            return $stmt;
+
+        } catch (PDOException $error) {
+            printf("Error %s. \n", $error->getMessage());
+            exit;
+        }
+    }
+
+    public function userOrder(){
+        try {
+            $query = "SELECT * 
+                        FROM
+                    $this->order o
+                        LEFT JOIN 
+                    $this->vendor v ON v.vid = o.vid  
+                WHERE
+                    uid= ?            
+            ";
+
+            $stmt = $this->conn->prepare($query); 
+            // CLEAN USER DATA
+            $this->id = htmlspecialchars(strip_tags($this->id));
+
+            //BIND PARAM
+            $stmt->bindParam(1, $this->uid);
             
             $stmt->execute();
             return $stmt;

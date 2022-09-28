@@ -16,11 +16,10 @@ $user = new Chowbox($db);
 
 // $user->authenticate();
 
-$user->id = isset($_SESSION["authid"]) ? $_SESSION["authid"] : 0;
-// $user->id = $_SESSION["authid"];
-// $user->id = 123;
+$user->uid = isset($_SESSION["authid"]) ? $_SESSION["authid"] : die();
+
 //RETURNED USER
-$info = $user->userInfo();
+$info = $user->userOrder();
 
 //CHECK COUNT
 $num = $info->rowCount();
@@ -32,7 +31,8 @@ if($num > 0){
     
     while($row = $info->fetch(PDO::FETCH_ASSOC)){
         extract($row);
-        $data = array('username' => $username, 'firstname'=> $ufname, 'lastname'=> $ulname, 'contact'=> $ucontact, 'balance'=> $ucredit, 'image'=> $uimage, 'home_address' => $address, 'work_address' => $alt_address);
+        // $order = json_encode($content);
+        $data = array('vendor' => $vname, 'location'=> $vlocation, 'orderid'=> $oid, 'total'=> $osum, 'date'=> $odd, 'status'=> $ostatus, 'order' => $content, 'cover' => $vimage);
         array_push($data_arr["data"], $data);
     }
 

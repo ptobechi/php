@@ -28,6 +28,7 @@ if($num > 0){
         extract($row); //GIVE US DIRECT ACESS TO COLUMUN NAME email, userid WITHOUT $row --- ($row[email], $row['password'], $row['userid'])
 
         $data_arr['vendor'] = $vname;
+        $data_arr['storeid'] = $vid;
         $data_arr['address'] = $vlocation;
         $data_arr["contact"] = $vcontact;
         $data_arr["image"] = $vimage;

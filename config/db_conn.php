@@ -23,13 +23,15 @@ class Database{
     }
 
     protected function CreateDataTables(){
-        $query = ("CREATE TABLE IF NOT EXISTS register ( 
+        $query = ("CREATE TABLE IF NOT EXISTS users ( 
             `id` INT NOT NULL AUTO_INCREMENT ,
             `uid` VARCHAR(10) NOT NULL , 
             `ufname` VARCHAR(100) NOT NULL , 
             `ulname` VARCHAR(100) NOT NULL , 
             `ucontact` VARCHAR(100) NOT NULL , 
             `uimage` VARCHAR(255) NOT NULL ,  
+            `address` VARCHAR(500) NOT NULL ,  
+            `alt_address` VARCHAR(500) NOT NULL ,  
             `ustatus` VARCHAR(11) NOT NULL ,  
             `upassword` VARCHAR(100) NOT NULL ,  
             `ucreated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
@@ -66,9 +68,26 @@ class Database{
             `paddons` VARCHAR(255) NOT NULL , 
             `pimage` VARCHAR(50) NOT NULL ,  
             `pstatus` INT(11) NOT NULL ,  
-            `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
+            `pcreated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
             PRIMARY KEY  (`id`),
             FOREIGN KEY (`vid`) REFERENCES vendors(`vid`)
+        )ENGINE = InnoDB;");
+        $stmt = $this->conn->prepare($query);  // PREPARE STATEMENT FOR INSERTING
+        $stmt->execute();  // EXECUTE THE QUERY
+
+        $query = ("CREATE TABLE IF NOT EXISTS sales ( 
+            `id` INT NOT NULL AUTO_INCREMENT ,
+            `oid` VARCHAR(10) NOT NULL , 
+            `uid` VARCHAR(10) NOT NULL , 
+            `vid` VARCHAR(10) NOT NULL , 
+            `content` VARCHAR(1025) NOT NULL , 
+            `osum` VARCHAR(255) NOT NULL , 
+            `delivery_address` VARCHAR(255) NOT NULL , 
+            `ostatus` INT(11) NOT NULL ,  
+            `ocreated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,  
+            PRIMARY KEY  (`id`),
+            FOREIGN KEY (`vid`) REFERENCES vendors(`vid`),
+            FOREIGN KEY (`uid`) REFERENCES register(`uid`)
         )ENGINE = InnoDB;");
         $stmt = $this->conn->prepare($query);  // PREPARE STATEMENT FOR INSERTING
         $stmt->execute();  // EXECUTE THE QUERY
