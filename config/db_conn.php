@@ -44,6 +44,7 @@ class Database{
         $query = ("CREATE TABLE IF NOT EXISTS vendors ( 
             `id` INT NOT NULL AUTO_INCREMENT ,
             `vid` VARCHAR(10) NOT NULL , 
+            `vemail` VARCHAR(255) NOT NULL , 
             `vname` VARCHAR(255) NOT NULL , 
             `vcontact` VARCHAR(100) NOT NULL , 
             `vlocation` VARCHAR(255) NOT NULL , 
